@@ -1,4 +1,4 @@
-package com.example.swapidevtest.PRESENTATION
+package com.example.swapidevtest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.swapidevtest.DATA.Repository.PeopleRepository
+import com.example.swapidevtest.PRESENTATION.StarWarsViewModel
 import com.example.swapidevtest.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

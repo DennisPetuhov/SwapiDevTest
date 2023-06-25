@@ -15,6 +15,7 @@ import com.example.swapidevtest.DOMAIN.model.Person
 import com.example.swapidevtest.databinding.FragmentPeopleBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PeopleFragment : Fragment() {
@@ -25,6 +26,8 @@ class PeopleFragment : Fragment() {
     companion object {
         fun newInstance() = PeopleFragment()
     }
+    @Inject
+    lateinit var     adapter: PersonRecyclerAdapter
 
 
 
@@ -56,7 +59,7 @@ class PeopleFragment : Fragment() {
     }
 
     fun recycler(list:List<Person>?){
-        val adapter = PersonRecyclerAdapter()
+
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
         }

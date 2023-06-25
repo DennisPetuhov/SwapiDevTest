@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.swapidevtest.DATA.DB.Constants.PERSON_TABLE
+import com.example.swapidevtest.DOMAIN.model.Person
 
 @Dao
 interface PersonDao {
