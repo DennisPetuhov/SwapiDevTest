@@ -11,18 +11,26 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
-class PeopleViewModel@Inject constructor(private val peopleRepository: PeopleRepository) : ViewModel() {
+class LikesViewModel @Inject constructor(private val peopleRepository: PeopleRepository) : ViewModel() {
 
-    val searchPeople: StateFlow<PeopleSearchResponse> get() =_searchPeople
-    private var _searchPeople: MutableStateFlow<PeopleSearchResponse> = MutableStateFlow( PeopleSearchResponse())
-    fun getPeople() {        viewModelScope.launch(Dispatchers.IO) {
-        peopleRepository.getPeopleFromInternet().collect {
+
+
+
+val listOfPeople: StateFlow<PeopleSearchResponse> get() = _listOfPeople
+private var _listOfPeople: MutableStateFlow<PeopleSearchResponse> =
+    MutableStateFlow(PeopleSearchResponse())
+
+fun getPeopleFromDB() {
+    viewModelScope.launch(Dispatchers.Main) {
+        peopleRepository.getAllPeopleFromDB().collect {
             it?.let {
-                _searchPeople.value = it
+               println(it)
             }
         }
 
 
-    }
-    }
-}
+    }}}
+
+//
+//    val list = dao.getAllPersons()
+//    println(list)

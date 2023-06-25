@@ -9,9 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listadapyter.PersonRecyclerAdapter
 import com.example.swapidevtest.DOMAIN.model.Person
+import com.example.swapidevtest.R
 import com.example.swapidevtest.databinding.FragmentPeopleBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -54,6 +56,9 @@ class PeopleFragment : Fragment() {
     fun button() {
         binding.button.setOnClickListener {
             viewModel.getPeople()
+        }
+        binding.buttonToLikes.setOnClickListener {
+            findNavController().navigate(R.id.action_peopleFragment_to_likesFragment)
         }
 
     }

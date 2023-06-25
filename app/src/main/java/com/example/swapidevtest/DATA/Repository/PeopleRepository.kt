@@ -11,8 +11,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class PeopleRepository @Inject constructor(private val personDao: PersonDao,private val apiService: ApiServicePeople) {
-    suspend fun getPeople(): Flow<PeopleSearchResponse> {
+class PeopleRepository @Inject constructor(
+    private val personDao: PersonDao,
+    private val apiService: ApiServicePeople
+) {
+    suspend fun getPeopleFromInternet(): Flow<PeopleSearchResponse> {
         return flow {
             val response = apiService.getPeopleSearch()
             Log.d("*response", response.toString())
@@ -22,10 +25,14 @@ class PeopleRepository @Inject constructor(private val personDao: PersonDao,priv
     }
 
 
-
     fun saveNote(note: PersonEntity) = personDao.insertPerson(note)
     fun updateNote(note: PersonEntity) = personDao.updatePerson(note)
     fun deleteNote(note: PersonEntity) = personDao.deletePerson(note)
-    fun getNote(id : Int) : PersonEntity = personDao.getPerson(id)
-    fun getAllNotes() = personDao.getAllPersons()
+    fun getNote(id: Int): PersonEntity = personDao.getPerson(id)
+    fun getAllPeopleFromDB(): Flow<MutableList<PersonEntity>> {
+        return flow {
+            val list = personDao.getAllPersons()
+            emit(list)
+        }
+    }
 }
