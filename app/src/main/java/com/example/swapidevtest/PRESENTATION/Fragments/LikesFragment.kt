@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.recyclerretrofitsealed.RecyclerView.MyAdapter
 import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.PRESENTATION.RecycleView.FragmentLikes.PersonDBRListAdapter
 import com.example.swapidevtest.R
@@ -29,8 +28,8 @@ class LikesFragment : Fragment() {
     @Inject
     lateinit var adapter: PersonDBRListAdapter
 
-    @Inject
-    lateinit var adapterR: MyAdapter
+//    @Inject
+//    lateinit var adapterR: MyAdapter
 
 
     companion object {
@@ -81,18 +80,18 @@ class LikesFragment : Fragment() {
     }
 
 
-    private fun setupRecyclerView(list: MutableList<PersonEntity>?) {
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-//            adapter=adapterR
-            list?.let {
-                adapterR.updateList(it)
-
-
-            }
-        }
-
-    }
+//    private fun setupRecyclerView(list: MutableList<PersonEntity>?) {
+//        binding.recyclerView.apply {
+//            layoutManager = LinearLayoutManager(requireContext())
+////            adapter=adapterR
+//            list?.let {
+//                adapterR.updateList(it)
+//
+//
+//            }
+//        }
+//
+//    }
 
     private fun observeChanges() {
 

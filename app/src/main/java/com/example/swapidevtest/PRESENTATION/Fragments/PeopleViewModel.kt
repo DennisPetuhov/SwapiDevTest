@@ -16,8 +16,8 @@ class PeopleViewModel@Inject constructor(private val peopleRepository: PeopleRep
 
     val searchPeople: StateFlow<PeopleSearchResponse> get() =_searchPeople
     private var _searchPeople: MutableStateFlow<PeopleSearchResponse> = MutableStateFlow( PeopleSearchResponse())
-    fun getPeople() {        viewModelScope.launch(Dispatchers.IO) {
-        peopleRepository.getPeopleFromInternet().collect {
+    fun getPeople(qwerty:String?) {        viewModelScope.launch(Dispatchers.IO) {
+        peopleRepository.getPeopleFromInternet(qwerty).collect {
             it?.let {
                 _searchPeople.value = it
             }

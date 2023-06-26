@@ -2,11 +2,10 @@ package com.example.swapidevtest.PRESENTATION.RecycleView.FragmentLikes
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.swapidevtest.DATA.DB.PersonEntity
-import com.example.swapidevtest.DOMAIN.model.Person
-import com.example.swapidevtest.databinding.PersonDbBinding
-import com.example.swapidevtest.databinding.PersonViewBinding
 
-class MyModelVievHolder(val binding: PersonDbBinding):RecyclerView.ViewHolder(binding.root) {
+import com.example.swapidevtest.databinding.PersonViewLikesBinding
+
+class MyModelVievHolder(val binding: PersonViewLikesBinding):RecyclerView.ViewHolder(binding.root) {
 
 //    var modelName:TextView = itemView.findViewById(R.id.name)
 //    var modelId:TextView = itemView.findViewById(R.id.id)

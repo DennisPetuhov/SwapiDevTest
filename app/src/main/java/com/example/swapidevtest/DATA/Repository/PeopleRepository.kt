@@ -15,9 +15,9 @@ class PeopleRepository @Inject constructor(
     private val personDao: PersonDao,
     private val apiService: ApiServicePeople
 ) {
-    suspend fun getPeopleFromInternet(): Flow<PeopleSearchResponse> {
+    suspend fun getPeopleFromInternet(qwerty:String?): Flow<PeopleSearchResponse> {
         return flow {
-            val response = apiService.getPeopleSearch()
+            val response = apiService.getPeopleSearch(qwerty)
             Log.d("*response", response.toString())
             emit(response)
         }.flowOn(Dispatchers.IO)

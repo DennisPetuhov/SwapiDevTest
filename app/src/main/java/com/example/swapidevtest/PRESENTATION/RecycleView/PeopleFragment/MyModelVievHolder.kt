@@ -1,12 +1,10 @@
 package com.example.swapidevtest.PRESENTATION.RecycleView.PeopleFragment
 
 import androidx.recyclerview.widget.RecyclerView
-import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.DOMAIN.model.Person
-import com.example.swapidevtest.databinding.PersonDbBinding
 import com.example.swapidevtest.databinding.PersonViewBinding
 
-class MyModelVievHolder(val binding: PersonDbBinding):RecyclerView.ViewHolder(binding.root) {
+class MyModelVievHolder(val binding: PersonViewBinding):RecyclerView.ViewHolder(binding.root) {
 
 //    var modelName:TextView = itemView.findViewById(R.id.name)
 //    var modelId:TextView = itemView.findViewById(R.id.id)

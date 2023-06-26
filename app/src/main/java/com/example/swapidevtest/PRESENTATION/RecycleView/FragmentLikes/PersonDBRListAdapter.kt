@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.swapidevtest.DATA.DB.PersonDao
 import com.example.swapidevtest.DATA.DB.PersonEntity
-import com.example.swapidevtest.databinding.PersonDbBinding
+import com.example.swapidevtest.databinding.PersonViewLikesBinding
 import javax.inject.Inject
 
 class PersonDBRListAdapter @Inject constructor(val dao: PersonDao) :
     ListAdapter<PersonEntity, MyModelVievHolder>(
         MyModelDiffUtill()
     ) {
-    lateinit var binding: PersonDbBinding
+    lateinit var binding: PersonViewLikesBinding
 
     private var actions: MyListClickListener? = null
     fun bindAction(action: MyListClickListener) {
@@ -24,12 +24,12 @@ class PersonDBRListAdapter @Inject constructor(val dao: PersonDao) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyModelVievHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = PersonDbBinding.inflate(inflater, parent, false)
+        binding = PersonViewLikesBinding.inflate(inflater, parent, false)
 
         return MyModelVievHolder(binding)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+
     override fun onBindViewHolder(holder: MyModelVievHolder, position: Int) {
         val myPerson = getItem(position)
         holder.bindTo(myPerson)
