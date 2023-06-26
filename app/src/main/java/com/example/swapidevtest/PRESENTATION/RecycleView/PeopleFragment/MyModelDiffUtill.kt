@@ -1,6 +1,7 @@
-package com.example.listadapyter
+package com.example.swapidevtest.PRESENTATION.RecycleView.PeopleFragment
 
 import androidx.recyclerview.widget.DiffUtil
+import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.DOMAIN.model.Person
 
 class MyModelDiffUtill:DiffUtil.ItemCallback<Person>() {

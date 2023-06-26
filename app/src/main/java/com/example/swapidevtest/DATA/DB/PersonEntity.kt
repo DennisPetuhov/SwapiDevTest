@@ -13,18 +13,21 @@ import com.example.swapidevtest.DOMAIN.model.Person
 data class PersonEntity(
     @PrimaryKey(autoGenerate = true)
     val personId: Int = 0,
-    var name: String= "",
+    var name: String = "",
     @ColumnInfo(name = "sex")
     var sex: String = "",
     @ColumnInfo(name = "star_ship")
-    var starShip: ArrayList<String> = arrayListOf()
+    var starShip: ArrayList<String> = arrayListOf(),
+    @ColumnInfo(name = "films")
+    var films: ArrayList<String> = arrayListOf()
 )
 
-fun PersonEntity.personToPersonEntity(person: Person):PersonEntity{
+fun PersonEntity.personToPersonEntity(person: Person): PersonEntity {
 
-    this.name= person.name
+    this.name = person.name
     this.sex = person.gender
     this.starShip = ArrayList(person.starships)
+    this.films = ArrayList(person.films)
     println(this.name)
     return this
 

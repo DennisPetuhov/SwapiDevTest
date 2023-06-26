@@ -1,6 +1,6 @@
 package com.example.swapidevtest.PRESENTATION.Fragments
 
-import androidx.lifecycle.ViewModelProvider
+import com.example.swapidevtest.PRESENTATION.RecycleView.MyListClickListener
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,19 +11,26 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.swapidevtest.DATA.DB.PersonDao
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.recyclerretrofitsealed.RecyclerView.MyAdapter
+import com.example.swapidevtest.DATA.DB.PersonEntity
+import com.example.swapidevtest.PRESENTATION.RecycleView.FragmentLikes.PersonDBRListAdapter
 import com.example.swapidevtest.R
 import com.example.swapidevtest.databinding.FragmentLikesBinding
-import com.example.swapidevtest.databinding.FragmentPeopleBinding
-import com.example.swapidevtest.databinding.PersonViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @AndroidEntryPoint
-class LikesFragment  : Fragment() {
+class LikesFragment : Fragment() {
     private lateinit var binding: FragmentLikesBinding
     private val viewModel: LikesViewModel by viewModels()
 
+    @Inject
+    lateinit var adapter: PersonDBRListAdapter
+
+    @Inject
+    lateinit var adapterR: MyAdapter
 
 
     companion object {
@@ -35,14 +42,15 @@ class LikesFragment  : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLikesBinding.inflate(inflater,container, false)
+        binding = FragmentLikesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeChanges()
+        deleteItemFromList()
         button()
+        observeChanges()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -63,19 +71,66 @@ class LikesFragment  : Fragment() {
 
     }
 
+    fun listRecycler(list: List<PersonEntity>?) {
+
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+        binding.recyclerView.adapter = adapter
+        adapter.submitList(list?.toMutableList())
+    }
+
+
+    private fun setupRecyclerView(list: MutableList<PersonEntity>?) {
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+//            adapter=adapterR
+            list?.let {
+                adapterR.updateList(it)
+
+
+            }
+        }
+
+    }
+
     private fun observeChanges() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+
                 viewModel.listOfPeople.collect {
+                    listRecycler(it)
 
-                        println(it.people.toString())
+//                    adapterR.updateList(it)
 
-                    }
+//                    setupRecyclerView(it)
+
+                    println(it)
 
                 }
-            }
 
+            }
         }
+
     }
+
+
+    private fun deleteItemFromList() {
+
+
+        adapter.bindAction(object : MyListClickListener {
+            override fun deletePersonEntity(person: PersonEntity) {
+                viewModel.deletePersonEntity(person)
+                viewModel.getPeopleFromDB()
+
+            }
+        })
+
+
+//        binding.recyclerView.adapter = adapterR
+
+    }
+}
 

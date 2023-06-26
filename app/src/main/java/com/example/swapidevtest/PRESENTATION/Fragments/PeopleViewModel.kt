@@ -2,6 +2,7 @@ package com.example.swapidevtest.PRESENTATION.Fragments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.DATA.Repository.PeopleRepository
 import com.example.swapidevtest.DOMAIN.model.PeopleSearchResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,4 +26,13 @@ class PeopleViewModel@Inject constructor(private val peopleRepository: PeopleRep
 
     }
     }
+
+    fun getFilms() {
+        TODO("Not yet implemented")
+    }
+
+    fun savePeopleToDb(personEntity: PersonEntity) {
+        peopleRepository.saveNote(personEntity)
+    }
+
 }

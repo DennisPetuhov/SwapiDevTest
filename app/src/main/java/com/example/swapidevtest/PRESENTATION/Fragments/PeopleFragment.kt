@@ -11,8 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.listadapyter.PersonRecyclerAdapter
+import com.example.swapidevtest.DATA.DB.PersonEntity
+import com.example.swapidevtest.PRESENTATION.RecycleView.PeopleFragment.PersonRecyclerAdapter
 import com.example.swapidevtest.DOMAIN.model.Person
+import com.example.swapidevtest.PRESENTATION.RecycleView.PeopleFragment.AdPersonToDbAndMakeApiRequest
 import com.example.swapidevtest.R
 import com.example.swapidevtest.databinding.FragmentPeopleBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +51,9 @@ class PeopleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         observeChanges()
+        adPeopleToDBandMakeFilmRequest()
         button()
     }
 
@@ -91,6 +95,19 @@ class PeopleFragment : Fragment() {
             }
 
         }
+    }
+
+    fun adPeopleToDBandMakeFilmRequest(){
+        adapter.bindAction(object:AdPersonToDbAndMakeApiRequest{
+            override fun getFilms() {
+            viewModel.getFilms()
+            }
+
+            override fun savePeopletoDb(personEntity: PersonEntity) {
+                viewModel.savePeopleToDb(personEntity)
+            }
+
+        })
     }
 }
 
