@@ -1,6 +1,6 @@
-package com.example.swapidevtest.PRESENTATION.RecycleView.FragmentLikes
+package com.example.swapidevtest.PRESENTATION.UI.RecycleView.FragmentLikes
 
-import com.example.swapidevtest.PRESENTATION.RecycleView.MyListClickListener
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MyListClickListener
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup

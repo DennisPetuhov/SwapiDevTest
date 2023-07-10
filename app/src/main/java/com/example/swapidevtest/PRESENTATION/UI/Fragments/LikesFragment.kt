@@ -1,6 +1,6 @@
-package com.example.swapidevtest.PRESENTATION.Fragments
+package com.example.swapidevtest.PRESENTATION.UI.Fragments
 
-import com.example.swapidevtest.PRESENTATION.RecycleView.MyListClickListener
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MyListClickListener
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.swapidevtest.DATA.DB.PersonEntity
-import com.example.swapidevtest.PRESENTATION.RecycleView.FragmentLikes.PersonDBRListAdapter
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.FragmentLikes.PersonDBRListAdapter
 import com.example.swapidevtest.R
 import com.example.swapidevtest.databinding.FragmentLikesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +95,7 @@ class LikesFragment : Fragment() {
 
     private fun observeChanges() {
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
 

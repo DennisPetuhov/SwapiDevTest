@@ -1,4 +1,4 @@
-package com.example.swapidevtest.PRESENTATION.RecycleView
+package com.example.swapidevtest.PRESENTATION.UI.RecycleView
 
 import com.example.swapidevtest.DATA.DB.PersonEntity
 

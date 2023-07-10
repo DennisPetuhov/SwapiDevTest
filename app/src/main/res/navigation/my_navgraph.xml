@@ -7,16 +7,16 @@
 
     <fragment
         android:id="@+id/peopleFragment"
-        android:name="com.example.swapidevtest.PRESENTATION.Fragments.PeopleFragment"
+        android:name="com.example.swapidevtest.PRESENTATION.UI.Fragments.MainFragment"
         android:label="fragment_people"
-        tools:layout="@layout/fragment_people" >
+        tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_peopleFragment_to_likesFragment"
             app:destination="@id/likesFragment" />
     </fragment>
     <fragment
         android:id="@+id/likesFragment"
-        android:name="com.example.swapidevtest.PRESENTATION.Fragments.LikesFragment"
+        android:name="com.example.swapidevtest.PRESENTATION.UI.Fragments.LikesFragment"
         android:label="fragment_likes"
         tools:layout="@layout/fragment_likes" >
         <action

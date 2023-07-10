@@ -1,4 +1,4 @@
-package com.example.swapidevtest.PRESENTATION.RecycleView.PeopleFragment
+package com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -32,7 +32,7 @@ class PersonRecyclerAdapter @Inject constructor(val dao: PersonDao) :
 
     override fun onBindViewHolder(holder: MyModelVievHolder, position: Int) {
         val myPerson = getItem(position)
-        holder.bindTo(myPerson)
+        holder.bindToPerson(myPerson)
         holder.binding.button2.setOnClickListener {
             action.let {
                 it?.savePeopletoDb(PersonEntity().personToPersonEntity(myPerson))

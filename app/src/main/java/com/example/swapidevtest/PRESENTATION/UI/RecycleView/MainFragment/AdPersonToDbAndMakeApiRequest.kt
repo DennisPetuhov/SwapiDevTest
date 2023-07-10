@@ -1,4 +1,4 @@
-package com.example.swapidevtest.PRESENTATION.RecycleView.PeopleFragment
+package com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment
 
 import com.example.swapidevtest.DATA.DB.PersonEntity
 

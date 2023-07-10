@@ -1,4 +1,4 @@
-package com.example.swapidevtest.PRESENTATION.RecycleView.FragmentLikes
+package com.example.swapidevtest.PRESENTATION.UI.RecycleView.FragmentLikes
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.swapidevtest.DATA.DB.PersonEntity

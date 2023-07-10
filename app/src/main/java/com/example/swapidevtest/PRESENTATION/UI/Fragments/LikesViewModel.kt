@@ -1,10 +1,9 @@
-package com.example.swapidevtest.PRESENTATION.Fragments
+package com.example.swapidevtest.PRESENTATION.UI.Fragments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.swapidevtest.DATA.DB.PersonEntity
-import com.example.swapidevtest.DATA.Repository.PeopleRepository
-import com.example.swapidevtest.DOMAIN.model.PeopleSearchResponse
+import com.example.swapidevtest.DATA.Repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LikesViewModel @Inject constructor(private val peopleRepository: PeopleRepository) :
+class LikesViewModel @Inject constructor(private val peopleRepository: Repository) :
     ViewModel() {
 
 

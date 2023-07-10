@@ -1,27 +1,34 @@
 package com.example.swapidevtest.DATA.Repository
 
-import android.util.Log
+import com.example.flowapi.Data.API.ApiHelperImpl
 import com.example.swapidevtest.DATA.DB.PersonDao
 import com.example.swapidevtest.DATA.DB.PersonEntity
+import com.example.swapidevtest.DOMAIN.model.FilmResponse
 import com.example.swapidevtest.DOMAIN.model.PeopleSearchResponse
-import com.example.ui.DATA.Api.ApiServicePeople
-import kotlinx.coroutines.Dispatchers
+import com.example.swapidevtest.DOMAIN.model.Person
+import com.example.swapidevtest.DOMAIN.model.SpaceShipResponse
+import com.example.swapidevtest.DOMAIN.model.StarShips
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class PeopleRepository @Inject constructor(
+class Repository @Inject constructor(
     private val personDao: PersonDao,
-    private val apiService: ApiServicePeople
-) {
-    suspend fun getPeopleFromInternet(qwerty:String?): Flow<PeopleSearchResponse> {
-        return flow {
-            val response = apiService.getPeopleSearch(qwerty)
-            Log.d("*response", response.toString())
-            emit(response)
-        }.flowOn(Dispatchers.IO)
+    private val apiHelper: ApiHelperImpl
 
+) {
+
+    fun getPeopleSearch(qwerty: String?): Flow<List<Person>> {
+        return apiHelper.getPeopleSearch(qwerty)
+
+    }
+
+     fun getShipSearch(qwerty: String?): Flow<List<StarShips>> {
+        return apiHelper.getShipSearch(qwerty)
+    }
+
+    fun getFilmList(listOfFilms:MutableList<String>): Flow<MutableList<FilmResponse>> {
+        return apiHelper.getFilmList(listOfFilms)
     }
 
 
