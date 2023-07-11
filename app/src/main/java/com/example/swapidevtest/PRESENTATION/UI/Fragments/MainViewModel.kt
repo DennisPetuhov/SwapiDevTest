@@ -6,8 +6,8 @@ import com.example.flowapi.Presentation.UI.Base.UiState
 import com.example.swapidevtest.DOMAIN.UseCase.GetFilmsUseCase.GetFilmsUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.PeopleSearchUseCase.PeopleSearchUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.StarShipSearchUseCase.StarShipSearchUseCase
+import com.example.swapidevtest.DOMAIN.model.CommonItem
 import com.example.swapidevtest.DOMAIN.model.FilmResponse
-import com.example.swapidevtest.DOMAIN.model.Person
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,33 +25,36 @@ val listofFilms = mutableListOf(
     " https://swapi.dev/api/films/3/",
     "https://swapi.dev/api/films/6/"
 )
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val  peopleSearchUseCase: PeopleSearchUseCase,
+    private val peopleSearchUseCase: PeopleSearchUseCase,
     private val starShipSearchUseCase: StarShipSearchUseCase,
     private val getFilmsUseCase: GetFilmsUseCase
-    ) : ViewModel() {
+) : ViewModel() {
 
 
 
 
     init {
-        getPeople()
-        getFilms(listofFilms)
+//        getPeople()
+//        getFilms(listofFilms)
+//        getZipList("star")
     }
-    val searchZipList: StateFlow<UiState<List<Any>>> get() = _searchZipList
-    private var _searchZipList: MutableStateFlow<UiState<List<Any>>> =
-        MutableStateFlow<UiState<List<Any>>>(UiState.Loading)
+
+    val searchZipListState: StateFlow<UiState<MutableList<CommonItem>>> get() = _searchZipList
+    private var _searchZipList: MutableStateFlow<UiState<MutableList<CommonItem>>> =
+        MutableStateFlow<UiState<MutableList<CommonItem>>>(UiState.Loading)
 
     fun getZipList(qwerty: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _searchZipList.value= UiState.Loading
+            _searchZipList.value = UiState.Loading
             val people = peopleSearchUseCase.getPeopleSearchUseCase(qwerty)
             val starships = starShipSearchUseCase.starShipSearchUseCase(qwerty)
 
             people.zip(starships) { peopleSearchResponse, starShipsSearchResponse ->
-                val list = mutableListOf<Any>()
-                list .addAll(peopleSearchResponse)
+                val list = mutableListOf<CommonItem>()
+                list.addAll(peopleSearchResponse)
 
                 list.addAll(starShipsSearchResponse)
 //                println("!!! $peopleStarhipsList")
@@ -60,18 +63,19 @@ class MainViewModel @Inject constructor(
 
             }.flowOn(Dispatchers.IO)
                 .catch { e ->
-                    _searchZipList.value= UiState.Error(e.toString())
-                        println("ERROR + $e") }
+                    _searchZipList.value = UiState.Error(e.toString())
+                    println("ERROR + $e")
+                }
                 .collect {
-                 _searchZipList.value = UiState.Success(it)
+                    _searchZipList.value = UiState.Success(it)
 
                 }
         }
     }
 
-    val searchPeopleState: StateFlow<UiState<List<Person>>> get() = _searchPeopleState
+    val searchPeopleState: StateFlow<UiState<List<CommonItem.Person>>> get() = _searchPeopleState
     private var _searchPeopleState =
-        MutableStateFlow<UiState<List<Person>>>(UiState.Loading)
+        MutableStateFlow<UiState<List<CommonItem.Person>>>(UiState.Loading)
 
     private fun getPeople() {
         viewModelScope.launch(Dispatchers.Main) {
@@ -87,8 +91,6 @@ class MainViewModel @Inject constructor(
                 }
         }
     }
-
-
 
 
     val searchFilmsState: StateFlow<UiState<MutableList<FilmResponse>>> get() = _searchFilmsState
@@ -109,7 +111,6 @@ class MainViewModel @Inject constructor(
                 }
         }
     }
-
 
 
 //    fun savePeopleToDb(personEntity: PersonEntity) {

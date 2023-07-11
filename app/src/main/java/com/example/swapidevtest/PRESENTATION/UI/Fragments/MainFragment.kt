@@ -15,7 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flowapi.Presentation.UI.Base.UiState
-import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.PersonRecyclerAdapter
+import com.example.swapidevtest.DOMAIN.model.CommonItem
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.CommonListAdapter
 import com.example.swapidevtest.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +38,7 @@ class MainFragment() : Fragment(), CoroutineScope {
     }
 
     @Inject
-    lateinit var adapter: PersonRecyclerAdapter
+    lateinit var adapter: CommonListAdapter
 
 
     override fun onCreateView(
@@ -55,15 +56,16 @@ class MainFragment() : Fragment(), CoroutineScope {
     }
 
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 //        observeChanges()
+
+        setupZipObserver()
 //        adPeopleToDBandMakeFilmRequest()
 //        button()
-//        findPeopleViaEditText()
+
+        findPeopleViaEditText()
     }
 //
 //    fun button() {
@@ -81,7 +83,7 @@ class MainFragment() : Fragment(), CoroutineScope {
                 viewModel.searchPeopleState.collect {
                     when (it) {
                         is UiState.Success -> {
-                            println(it)
+                            println("@@@$it")
                         }
 
                         is UiState.Loading -> {
@@ -90,7 +92,7 @@ class MainFragment() : Fragment(), CoroutineScope {
 
                         is UiState.Error -> {
                             //Handle Error
-
+                            println("@@@${it.message}")
                             Toast.makeText(
                                 requireContext(),
                                 it.message,
@@ -103,14 +105,47 @@ class MainFragment() : Fragment(), CoroutineScope {
         }
     }
 
-//    fun recycler(list:List<Any>?){
-//
-//        binding.recyclerView.apply {
-//            layoutManager = LinearLayoutManager(requireContext())
-//        }
-//        binding.recyclerView.adapter=adapter
-//        adapter.submitList(list)
-//    }
+    private fun setupZipObserver() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchZipListState.collect {
+                    when (it) {
+                        is UiState.Success -> {
+                            it.data?.let {
+                                recycler(it)
+
+
+                            }
+                            println(it)
+                        }
+
+                        is UiState.Loading -> {
+                            println(it)
+                        }
+
+                        is UiState.Error -> {
+                            //Handle Error
+                            println("@@@${it.message}")
+                            Toast.makeText(
+                                requireContext(),
+                                it.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+        fun recycler(list:MutableList<CommonItem>?){
+
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+        binding.recyclerView.adapter=adapter
+        adapter.submitList(list)
+    }
 //    private fun observeChanges() {
 //
 //        lifecycleScope.launch {
@@ -145,9 +180,10 @@ class MainFragment() : Fragment(), CoroutineScope {
 //
 //        })
 //    }
-    fun findPeopleViaEditText(){
-        binding.edittext.afterTextChanged {  }
+    fun findPeopleViaEditText() {
+        binding.edittext.afterTextChanged { }
     }
+
     fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {
             private var searchFor = ""
@@ -158,7 +194,7 @@ class MainFragment() : Fragment(), CoroutineScope {
 
                 val searchText = s.toString().trim()
                 if (searchText.length < 2) {
-                    println("!!!!!!!!!!!!!!!!!!   "+searchText.length.toString())
+
                     return
                 } else {
 
@@ -169,7 +205,7 @@ class MainFragment() : Fragment(), CoroutineScope {
                         delay(3000)
                         if (searchText != searchFor)
                             return@launch
-                        viewModel.getZipList(qwerty = searchFor )
+                        viewModel.getZipList(qwerty = searchFor)
 
                     }
                 }

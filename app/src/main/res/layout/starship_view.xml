@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Like"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pasangers"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/model_of_starship"
+        android:layout_width="43dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/manufacturer"
+        app:layout_constraintEnd_toStartOf="@+id/manufacturer"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/name_starship"
+        app:layout_constraintTop_toTopOf="@+id/manufacturer" />
+
+    <TextView
+        android:id="@+id/name_starship"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/model_of_starship"
+        app:layout_constraintEnd_toStartOf="@+id/model_of_starship"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/model_of_starship" />
+
+    <TextView
+        android:id="@+id/manufacturer"
+        android:layout_width="62dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/pasangers"
+        app:layout_constraintEnd_toStartOf="@+id/pasangers"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/model_of_starship"
+        app:layout_constraintTop_toTopOf="@+id/pasangers" />
+
+    <TextView
+        android:id="@+id/pasangers"
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/manufacturer"
+        app:layout_constraintTop_toTopOf="@+id/button" />
+</androidx.constraintlayout.widget.ConstraintLayout>

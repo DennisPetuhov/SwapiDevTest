@@ -5,8 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.swapidevtest.DATA.DB.Constants.PERSON_TABLE
+import com.example.swapidevtest.DOMAIN.model.CommonItem
 import com.example.swapidevtest.DOMAIN.model.ListConverter.ArrayListConverter
-import com.example.swapidevtest.DOMAIN.model.Person
+
 
 @TypeConverters(ArrayListConverter::class)
 @Entity(tableName = PERSON_TABLE)
@@ -22,7 +23,7 @@ data class PersonEntity(
     var films: ArrayList<String> = arrayListOf()
 )
 
-fun PersonEntity.personToPersonEntity(person: Person): PersonEntity {
+fun PersonEntity.personToPersonEntity(person: CommonItem.Person): PersonEntity {
 
     this.name = person.name
     this.sex = person.gender

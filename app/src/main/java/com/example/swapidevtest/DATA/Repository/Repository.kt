@@ -3,11 +3,9 @@ package com.example.swapidevtest.DATA.Repository
 import com.example.flowapi.Data.API.ApiHelperImpl
 import com.example.swapidevtest.DATA.DB.PersonDao
 import com.example.swapidevtest.DATA.DB.PersonEntity
+import com.example.swapidevtest.DOMAIN.model.CommonItem
 import com.example.swapidevtest.DOMAIN.model.FilmResponse
-import com.example.swapidevtest.DOMAIN.model.PeopleSearchResponse
-import com.example.swapidevtest.DOMAIN.model.Person
-import com.example.swapidevtest.DOMAIN.model.SpaceShipResponse
-import com.example.swapidevtest.DOMAIN.model.StarShips
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -18,12 +16,12 @@ class Repository @Inject constructor(
 
 ) {
 
-    fun getPeopleSearch(qwerty: String?): Flow<List<Person>> {
+    fun getPeopleSearch(qwerty: String?): Flow<List<CommonItem.Person>> {
         return apiHelper.getPeopleSearch(qwerty)
 
     }
 
-     fun getShipSearch(qwerty: String?): Flow<List<StarShips>> {
+     fun getShipSearch(qwerty: String?): Flow<List<CommonItem.StarShips>> {
         return apiHelper.getShipSearch(qwerty)
     }
 

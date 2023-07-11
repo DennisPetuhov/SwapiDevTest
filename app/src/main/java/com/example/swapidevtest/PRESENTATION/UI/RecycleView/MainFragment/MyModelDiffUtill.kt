@@ -1,14 +1,15 @@
 package com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.swapidevtest.DOMAIN.model.Person
+import com.example.swapidevtest.DOMAIN.model.CommonItem
 
-class MyModelDiffUtill:DiffUtil.ItemCallback<Any>() {
-    override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+
+class MyModelDiffUtill:DiffUtil.ItemCallback<CommonItem>() {
+    override fun areItemsTheSame(oldItem: CommonItem, newItem: CommonItem): Boolean {
         return  oldItem==newItem
     }
 
-    override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+    override fun areContentsTheSame(oldItem: CommonItem, newItem: CommonItem): Boolean {
        return  oldItem==newItem
     }
 }

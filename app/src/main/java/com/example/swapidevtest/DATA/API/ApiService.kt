@@ -20,16 +20,13 @@ interface ApiService {
 //    public Call<List<Post>> getPostOfUser(@Query("userId") int id);
 //    Поэтому если мы передадим значение 6 в параметре метода, то конечная точка будет следующей — /posts?userId=6
 
-    @GET
+    @GET("starships")
     suspend fun  getShipSearch(  @Query ("search") qwerty :String?): StarShipsResponse
 
     @GET("films/{id}/")
     suspend fun  getFilm(@Path("id")  id:String ): FilmResponse
 
 
-
-    @GET
-    suspend fun  getShip():SpaceShipResponse
 
 
 }
