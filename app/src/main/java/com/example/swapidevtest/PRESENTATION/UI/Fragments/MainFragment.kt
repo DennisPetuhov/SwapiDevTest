@@ -15,8 +15,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flowapi.Presentation.UI.Base.UiState
+import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.DOMAIN.model.CommonItem
+import com.example.swapidevtest.DOMAIN.model.FilmResponse
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.AdPersonToDbAndMakeApiRequest
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildAdapter.ChildListAdapter
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.CommonListAdapter
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ProvideList
 import com.example.swapidevtest.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +45,9 @@ class MainFragment() : Fragment(), CoroutineScope {
     @Inject
     lateinit var adapter: CommonListAdapter
 
+    @Inject
+    lateinit var subAdapter: ChildListAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +70,8 @@ class MainFragment() : Fragment(), CoroutineScope {
 //        observeChanges()
 
         setupZipObserver()
-//        adPeopleToDBandMakeFilmRequest()
+        setupFilmsObserver()
+        adPeopleToDBandMakeFilmRequest()
 //        button()
 
         findPeopleViaEditText()
@@ -112,7 +121,7 @@ class MainFragment() : Fragment(), CoroutineScope {
                     when (it) {
                         is UiState.Success -> {
                             it.data?.let {
-                                recycler(it)
+                                commonRecycler(it)
 
 
                             }
@@ -138,15 +147,68 @@ class MainFragment() : Fragment(), CoroutineScope {
         }
     }
 
-        fun recycler(list:MutableList<CommonItem>?){
+    private fun setupFilmsObserver() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchFilmsState.collect {
+                    when (it) {
+                        is UiState.Success -> {
+                            it.data?.let {
+//                                subRecycler(it.toMutableList())
+                                adapter.bindList(object :ProvideList {
+                                    override fun provideList(): MutableList<FilmResponse> {
+                                      return it
+                                    }
+                                })
+
+                            }
+
+                            for (element in it.data) {
+                                println("###" + element.title)
+                            }
+
+                            println(it)
+                        }
+
+                        is UiState.Loading -> {
+                            println(it)
+                        }
+
+                        is UiState.Error -> {
+                            //Handle Error
+                            println("@@@${it.message}")
+                            Toast.makeText(
+                                requireContext(),
+                                it.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun commonRecycler(list: MutableList<CommonItem>?) {
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
         }
-        binding.recyclerView.adapter=adapter
+        binding.recyclerView.adapter = adapter
         adapter.submitList(list)
     }
-//    private fun observeChanges() {
+
+    fun subRecycler(list: MutableList<Any>?) {
+
+
+//        binding.recyclerView.apply {
+//            layoutManager = LinearLayoutManager(requireContext())
+//        }
+//        binding.recyclerView.adapter = adapter
+        subAdapter.submitList(list)
+    }
+
+    //    private fun observeChanges() {
 //
 //        lifecycleScope.launch {
 //            repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -168,18 +230,25 @@ class MainFragment() : Fragment(), CoroutineScope {
 //        }
 //    }
 //
-//    fun adPeopleToDBandMakeFilmRequest(){
-//        adapter.bindAction(object: AdPersonToDbAndMakeApiRequest {
-//            override fun getFilms() {
-//            viewModel.getFilms()
-//            }
-//
-//            override fun savePeopletoDb(personEntity: PersonEntity) {
-//                viewModel.savePeopleToDb(personEntity)
-//            }
-//
-//        })
-//    }
+    fun adPeopleToDBandMakeFilmRequest() {
+        adapter.bindAction(object : AdPersonToDbAndMakeApiRequest {
+            override fun getFilms(listOfFilms: MutableList<String>) {
+                viewModel.getFilms(listOfFilms)
+            }
+
+
+            override fun savePeopletoDb(personEntity: PersonEntity) {
+                viewModel.savePeopleToDb(personEntity)
+            }
+
+            override fun provideList(list: MutableList<Any>): MutableList<FilmResponse> {
+                TODO("Not yet implemented")
+            }
+
+
+        })
+    }
+
     fun findPeopleViaEditText() {
         binding.edittext.afterTextChanged { }
     }

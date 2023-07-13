@@ -2,8 +2,10 @@ package com.example.swapidevtest.DOMAIN.model
 
 import android.os.Parcelable
 import androidx.room.Ignore
-import com.example.swapidevtest.DOMAIN.model.CommonItem.ItemType.TYPE_PERSON
-import com.example.swapidevtest.DOMAIN.model.CommonItem.ItemType.TYPE_STARSHIP
+
+import com.example.swapidevtest.DOMAIN.model.ItemType.TYPE_PERSON
+
+import com.example.swapidevtest.DOMAIN.model.ItemType.TYPE_STARSHIP
 import kotlinx.parcelize.Parcelize
 
 sealed class CommonItem {
@@ -69,10 +71,7 @@ sealed class CommonItem {
     ) : CommonItem(), Parcelable
 
 
-object  ItemType{
-    const val TYPE_PERSON = 1
-    const val TYPE_STARSHIP = 2
-}
+
 
 
 }

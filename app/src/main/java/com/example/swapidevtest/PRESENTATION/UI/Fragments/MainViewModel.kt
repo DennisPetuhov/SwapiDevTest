@@ -3,6 +3,7 @@ package com.example.swapidevtest.PRESENTATION.UI.Fragments
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flowapi.Presentation.UI.Base.UiState
+import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.DOMAIN.UseCase.GetFilmsUseCase.GetFilmsUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.PeopleSearchUseCase.PeopleSearchUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.StarShipSearchUseCase.StarShipSearchUseCase
@@ -113,8 +114,8 @@ class MainViewModel @Inject constructor(
     }
 
 
-//    fun savePeopleToDb(personEntity: PersonEntity) {
-//        peopleRepository.saveNote(personEntity)
-//    }
+    fun savePeopleToDb(personEntity: PersonEntity) {
+//        saveNote(personEntity)
+    }
 
 }

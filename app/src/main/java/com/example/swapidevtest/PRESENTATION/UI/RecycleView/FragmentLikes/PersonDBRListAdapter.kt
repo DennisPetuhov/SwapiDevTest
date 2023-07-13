@@ -11,7 +11,7 @@ import com.example.swapidevtest.databinding.PersonViewLikesBinding
 import javax.inject.Inject
 
 class PersonDBRListAdapter @Inject constructor(val dao: PersonDao) :
-    ListAdapter<PersonEntity, MyModelVievHolder>(
+    ListAdapter<PersonEntity, MyModelViewHolder>(
         MyModelDiffUtill()
     ) {
     lateinit var binding: PersonViewLikesBinding
@@ -22,15 +22,15 @@ class PersonDBRListAdapter @Inject constructor(val dao: PersonDao) :
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyModelVievHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyModelViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         binding = PersonViewLikesBinding.inflate(inflater, parent, false)
 
-        return MyModelVievHolder(binding)
+        return MyModelViewHolder(binding)
     }
 
 
-    override fun onBindViewHolder(holder: MyModelVievHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyModelViewHolder, position: Int) {
         val myPerson = getItem(position)
         holder.bindTo(myPerson)
         holder.binding.button2.setOnClickListener {
