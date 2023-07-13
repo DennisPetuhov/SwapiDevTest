@@ -42,6 +42,8 @@ sealed class CommonItem {
         val url: String,
         @Ignore
         val vehicles: List<String>,
+     
+        val listOfFilmResponse : MutableList<FilmResponse> = mutableListOf(),
         override val viewType: Int = TYPE_PERSON
 
     ) : CommonItem(), Parcelable

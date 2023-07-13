@@ -123,7 +123,6 @@ class MainFragment() : Fragment(), CoroutineScope {
                             it.data?.let {
                                 commonRecycler(it)
 
-
                             }
                             println(it)
                         }

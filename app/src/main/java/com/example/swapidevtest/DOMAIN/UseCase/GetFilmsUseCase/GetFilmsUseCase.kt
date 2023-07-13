@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetFilmsUseCase @Inject constructor(val repository: Repository) {
-    fun getFilmList(listOfFilms: MutableList<String>): Flow<MutableList<FilmResponse>> {
+    fun getFilmListUseCase(listOfFilms: MutableList<String>): Flow<MutableList<FilmResponse>> {
       return  repository.getFilmList(listOfFilms)
     }
 }

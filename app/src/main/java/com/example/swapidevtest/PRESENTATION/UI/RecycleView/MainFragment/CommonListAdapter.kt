@@ -97,20 +97,8 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
                 holder.binding.subRecyclerView.layoutManager = layoutManager
 
                 holder.binding.subRecyclerView.adapter = subAdapter
-                val listOfFilmResponse = mutableListOf(
-                    FilmResponse(
-                        listOf(), "", "", "", 1, "", listOf(), "", "", listOf(),
-                        listOf(), "AAAAAAAAAAAA", "",
-                        listOf()
-                    ),
-                    FilmResponse(
-                        listOf(), "", "", "", 2, "", listOf(), "", "", listOf(),
-                        listOf(), "BBBBBBBBBBBB", "",
-                        listOf()
-                    )
 
-                )
-//                subAdapter.submitList(listOfFilmResponse.toList())
+                subAdapter.submitList(item.listOfFilmResponse.toList())
 
                 holder.binding.personLayout.setOnClickListener {
                     action.let {

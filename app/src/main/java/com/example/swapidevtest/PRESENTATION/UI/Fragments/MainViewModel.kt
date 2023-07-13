@@ -102,7 +102,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Main) {
             _searchPeopleState.value = UiState.Loading
 
-            getFilmsUseCase.getFilmList(listFilms)
+            getFilmsUseCase.getFilmListUseCase(listFilms)
                 .flowOn(Dispatchers.IO)
                 .catch { e ->
                     _searchFilmsState.value = UiState.Error(e.toString())

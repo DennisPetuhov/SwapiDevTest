@@ -1,5 +1,9 @@
 package com.example.swapidevtest.DOMAIN.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class FilmResponse(
     val characters: List<String>,
     val created: String,
@@ -15,4 +19,4 @@ data class FilmResponse(
     val title: String,
     val url: String,
     val vehicles: List<String>
-)
+):Parcelable

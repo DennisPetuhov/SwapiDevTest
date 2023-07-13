@@ -13,6 +13,21 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : Ap
     override fun getPeopleSearch(qwerty: String?): Flow<List<CommonItem.Person>> {
         return flow {
             val response = apiService.getPeopleSearch(qwerty).people
+            response?.let { listOfPerson ->
+                for (element in listOfPerson) {
+                    val listOfFilms = element.films
+
+                    for (film in listOfFilms) {
+                        val id = film.filter { it.isDigit() }
+                        val filmResponse = apiService.getFilm(id)
+                        element.listOfFilmResponse.add(filmResponse)
+
+                    }
+                    println("%%%" + element.listOfFilmResponse)
+                }
+
+
+            }
             response?.let {
                 emit(it)
             }
@@ -21,11 +36,12 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : Ap
     }
 
     override fun getShipSearch(qwerty: String?): Flow<List<CommonItem.StarShips>> {
-        return flow { val result =apiService.getShipSearch(qwerty).results
+        return flow {
+            val result = apiService.getShipSearch(qwerty).results
             result?.let {
                 emit(it)
             }
-            }
+        }
     }
 
     override fun getFilm(id: String): Flow<FilmResponse> {
