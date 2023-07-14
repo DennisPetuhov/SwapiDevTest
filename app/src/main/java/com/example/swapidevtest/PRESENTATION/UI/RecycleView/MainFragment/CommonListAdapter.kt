@@ -3,7 +3,6 @@ package com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -11,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.swapidevtest.DATA.DB.PersonDao
 
 import com.example.swapidevtest.DOMAIN.model.CommonItem
-import com.example.swapidevtest.DOMAIN.model.FilmResponse
 import com.example.swapidevtest.DOMAIN.model.ItemType
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildAdapter.ChildListAdapter
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildStarshipAdapter.ChildStarShipListAdapter
 
 import com.example.swapidevtest.databinding.PersonViewBinding
 import com.example.swapidevtest.databinding.StarshipViewBinding
@@ -24,7 +23,8 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
         MyModelDiffUtil()
     ) {
 
-    lateinit var subAdapter: ChildListAdapter
+    lateinit var subAdapterPerson: ChildListAdapter
+    lateinit var subAdapterStarShip: ChildStarShipListAdapter
 
     var action: AdPersonToDbAndMakeApiRequest? = null
     var list: ProvideList? = null
@@ -73,6 +73,32 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
         when (holder) {
             is StarShipViewHolder -> {
                 holder.bindStarship(item as CommonItem.StarShips)
+                subAdapterStarShip= ChildStarShipListAdapter()
+                val layoutManager = LinearLayoutManager(
+                    holder.binding.root.context,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+                holder.binding.subRecyclerView.layoutManager = layoutManager
+
+                holder.binding.subRecyclerView.adapter = subAdapterStarShip
+
+
+                subAdapterStarShip.submitList(item.films)
+
+                holder.binding.starshipLayout.setOnClickListener {
+//                    action.let {
+//                        it?.getFilms(item.films as MutableList<String>)
+
+//                        subAdapter.submitList(list?.provideList() as List<Any>?)
+//                    }
+//
+                    if (holder.binding.subRecyclerView.isVisible) {
+                        holder.binding.subRecyclerView.visibility = View.GONE
+                    } else {
+                        holder.binding.subRecyclerView.visibility = View.VISIBLE
+                    }
+                }
 
             }
 
@@ -88,7 +114,7 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
 //                holder.binding.subRecyclerView.apply {
 //                    layoutManager = LinearLayoutManager(requireContext(this@CommonListAdapter))
 //                }
-                subAdapter = ChildListAdapter()
+                subAdapterPerson = ChildListAdapter()
                 val layoutManager = LinearLayoutManager(
                     holder.binding.root.context,
                     LinearLayoutManager.VERTICAL,
@@ -96,16 +122,16 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
                 )
                 holder.binding.subRecyclerView.layoutManager = layoutManager
 
-                holder.binding.subRecyclerView.adapter = subAdapter
+                holder.binding.subRecyclerView.adapter = subAdapterPerson
 
-                subAdapter.submitList(item.listOfFilmResponse.toList())
+                subAdapterPerson.submitList(item.listOfFilmResponse.toList())
 
                 holder.binding.personLayout.setOnClickListener {
-                    action.let {
-                        it?.getFilms(item.films as MutableList<String>)
+//                    action.let {
+//                        it?.getFilms(item.films as MutableList<String>)
 
-                        subAdapter.submitList(list?.provideList() as List<Any>?)
-                    }
+//                        subAdapter.submitList(list?.provideList() as List<Any>?)
+//                    }
 //
                     if (holder.binding.subRecyclerView.isVisible) {
                         holder.binding.subRecyclerView.visibility = View.GONE
