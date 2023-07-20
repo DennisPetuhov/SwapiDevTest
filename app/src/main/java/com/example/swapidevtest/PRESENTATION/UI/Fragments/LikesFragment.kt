@@ -28,8 +28,7 @@ class LikesFragment : Fragment() {
     @Inject
     lateinit var adapter: PersonDBRListAdapter
 
-//    @Inject
-//    lateinit var adapterR: MyAdapter
+
 
 
     companion object {

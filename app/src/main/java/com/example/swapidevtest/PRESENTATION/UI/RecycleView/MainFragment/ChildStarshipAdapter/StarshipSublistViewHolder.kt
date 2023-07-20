@@ -10,7 +10,7 @@ class StarshipSublistViewHolder(val binding: ItemStarshipChildBinding): Recycler
     fun bindItem(starship: FilmResponse){
         with(binding){
             subText.text= starship.title
-//            subTextId.text = starship.films.toString()
+
         }
 
 

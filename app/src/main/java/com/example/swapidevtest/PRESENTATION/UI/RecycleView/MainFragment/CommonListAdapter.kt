@@ -102,11 +102,10 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: 
 
                 holder.binding.subRecyclerView.adapter = subAdapterStarShip
 
-                val listOfUrlFilms = item.films
+
 
                 holder.binding.starshipLayout.setOnClickListener {
 
-//                    subAdapterStarShip.submitList(item.films)
                     subAdapterStarShip.submitList(item.listOfFilmResponse.toList())
 
 
@@ -118,12 +117,7 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: 
                     printer.let {
                         it?.print(item.name)
                     }
-//                    action.let {
-//                        it?.getFilms(item.films as MutableList<String>)
 
-//                        subAdapter.submitList(list?.provideList() as List<Any>?)
-//                    }
-//
                     if (holder.binding.subRecyclerView.isVisible) {
                         holder.binding.subRecyclerView.visibility = View.GONE
                     } else {
