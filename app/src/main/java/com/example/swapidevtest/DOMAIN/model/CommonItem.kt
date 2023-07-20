@@ -68,7 +68,8 @@ sealed class CommonItem {
         val pilots: List<String>,
         val starship_class: String,
         val url: String,
-        override val viewType: Int = TYPE_STARSHIP
+        override val viewType: Int = TYPE_STARSHIP,
+        val listOfFilmResponse : MutableList<FilmResponse> = mutableListOf()
 
     ) : CommonItem(), Parcelable
 

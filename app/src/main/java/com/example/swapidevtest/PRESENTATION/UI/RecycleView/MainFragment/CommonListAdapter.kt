@@ -106,7 +106,8 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: 
 
                 holder.binding.starshipLayout.setOnClickListener {
 
-                    subAdapterStarShip.submitList(item.films)
+//                    subAdapterStarShip.submitList(item.films)
+                    subAdapterStarShip.submitList(item.listOfFilmResponse.toList())
 
 
 

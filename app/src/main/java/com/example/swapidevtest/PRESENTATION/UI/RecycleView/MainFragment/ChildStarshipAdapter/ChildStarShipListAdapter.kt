@@ -3,6 +3,7 @@ package com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildS
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.example.swapidevtest.DOMAIN.model.FilmResponse
 import com.example.swapidevtest.databinding.ItemStarshipChildBinding
 import javax.inject.Inject
 
@@ -21,6 +22,6 @@ class ChildStarShipListAdapter @Inject constructor()  :
 
     override fun onBindViewHolder(holder: StarshipSublistViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bindItem(item as String)
+        holder.bindItem(item as FilmResponse)
     }}
 
