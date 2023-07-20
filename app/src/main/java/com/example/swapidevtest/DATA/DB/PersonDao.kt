@@ -12,7 +12,9 @@ import com.example.swapidevtest.DATA.DB.Constants.PERSON_TABLE
 @Dao
 interface PersonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPerson(personEntity: PersonEntity)
+    fun insertPersonFlow(personEntity: PersonEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPerson(personEntity: PersonEntity)
 
     @Update
     fun updatePerson(personEntity: PersonEntity)

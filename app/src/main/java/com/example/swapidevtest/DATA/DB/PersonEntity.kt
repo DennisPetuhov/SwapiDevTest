@@ -28,8 +28,17 @@ fun PersonEntity.personToPersonEntity(person: CommonItem.Person): PersonEntity {
     this.name = person.name
     this.sex = person.gender
     this.starShip = ArrayList(person.starships)
-    this.films = ArrayList(person.films)
+    this.films = ArrayList(getListOfFilms(person))
     println(this.name)
     return this
 
+}
+
+fun getListOfFilms(person: CommonItem.Person): MutableList<String> {
+    val listOfFilms = mutableListOf<String>()
+    for (film in person.listOfFilmResponse) {
+        listOfFilms.add(film.title)
+
+    }
+    return listOfFilms
 }

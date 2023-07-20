@@ -13,18 +13,37 @@ import com.example.swapidevtest.DOMAIN.model.CommonItem
 import com.example.swapidevtest.DOMAIN.model.ItemType
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildAdapter.ChildListAdapter
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildStarshipAdapter.ChildStarShipListAdapter
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.MyPrinterInterface
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.ProvideList
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.SavePersonToDBFlow
 
 import com.example.swapidevtest.databinding.PersonViewBinding
 import com.example.swapidevtest.databinding.StarshipViewBinding
+import com.example.ui.DATA.Api.ApiService
 import javax.inject.Inject
 
-class CommonListAdapter @Inject constructor(val dao: PersonDao) :
+class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: ApiService) :
     ListAdapter<CommonItem, RecyclerView.ViewHolder>(
         MyModelDiffUtil()
     ) {
 
     lateinit var subAdapterPerson: ChildListAdapter
     lateinit var subAdapterStarShip: ChildStarShipListAdapter
+
+    private var printer: MyPrinterInterface? = null
+    private var pressToSavePersonToDBFlow: SavePersonToDBFlow? = null
+//    private var pressToSavePersonToDB: SavePersonToDB? = null
+//    fun bindPressToSavePersonToDb(action: SavePersonToDB) {
+//        this.pressToSavePersonToDB = action
+//    }
+
+    fun bindPressToSavePersonToDbFLOW(action: SavePersonToDBFlow) {
+        this.pressToSavePersonToDBFlow = action
+    }
+
+    fun bindPrinter(printer: MyPrinterInterface) {
+        this.printer = printer
+    }
 
     var action: AdPersonToDbAndMakeApiRequest? = null
     var list: ProvideList? = null
@@ -73,7 +92,7 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
         when (holder) {
             is StarShipViewHolder -> {
                 holder.bindStarship(item as CommonItem.StarShips)
-                subAdapterStarShip= ChildStarShipListAdapter()
+                subAdapterStarShip = ChildStarShipListAdapter()
                 val layoutManager = LinearLayoutManager(
                     holder.binding.root.context,
                     LinearLayoutManager.VERTICAL,
@@ -83,10 +102,21 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
 
                 holder.binding.subRecyclerView.adapter = subAdapterStarShip
 
-
-                subAdapterStarShip.submitList(item.films)
+                val listOfUrlFilms = item.films
 
                 holder.binding.starshipLayout.setOnClickListener {
+
+                    subAdapterStarShip.submitList(item.films)
+
+
+
+
+
+
+
+                    printer.let {
+                        it?.print(item.name)
+                    }
 //                    action.let {
 //                        it?.getFilms(item.films as MutableList<String>)
 
@@ -107,13 +137,6 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
                 holder.bindPerson(item as CommonItem.Person)
 
 
-//                val subListAdapter = SubListAdapter(item.subItems)
-//                holder.binding.subRecyclerView.adapter = subListAdapter
-
-
-//                holder.binding.subRecyclerView.apply {
-//                    layoutManager = LinearLayoutManager(requireContext(this@CommonListAdapter))
-//                }
                 subAdapterPerson = ChildListAdapter()
                 val layoutManager = LinearLayoutManager(
                     holder.binding.root.context,
@@ -127,17 +150,19 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
                 subAdapterPerson.submitList(item.listOfFilmResponse.toList())
 
                 holder.binding.personLayout.setOnClickListener {
-//                    action.let {
-//                        it?.getFilms(item.films as MutableList<String>)
 
-//                        subAdapter.submitList(list?.provideList() as List<Any>?)
-//                    }
-//
                     if (holder.binding.subRecyclerView.isVisible) {
                         holder.binding.subRecyclerView.visibility = View.GONE
                     } else {
                         holder.binding.subRecyclerView.visibility = View.VISIBLE
                     }
+                }
+                holder.binding.button2.setOnClickListener {
+                    pressToSavePersonToDBFlow.let {
+                        it?.savePersonToDbFlow(item)
+                    }
+
+
                 }
 
 
@@ -145,13 +170,6 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao) :
 
         }
 
-//        holder.binding.button2.setOnClickListener {
-//            action.let {
-//                it?.savePeopletoDb(PersonEntity().personToPersonEntity(myPerson))
-//            }
-//
-//
-//        }
 
     }
 }

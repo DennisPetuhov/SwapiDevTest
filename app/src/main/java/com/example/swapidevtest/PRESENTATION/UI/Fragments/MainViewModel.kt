@@ -3,17 +3,23 @@ package com.example.swapidevtest.PRESENTATION.UI.Fragments
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flowapi.Presentation.UI.Base.UiState
+import com.example.swapidevtest.DATA.DB.DatabaseHelperImpl
 import com.example.swapidevtest.DATA.DB.PersonEntity
+import com.example.swapidevtest.DATA.DB.personToPersonEntity
 import com.example.swapidevtest.DOMAIN.UseCase.GetFilmsUseCase.GetFilmsUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.PeopleSearchUseCase.PeopleSearchUseCase
+import com.example.swapidevtest.DOMAIN.UseCase.SacePersonToDbUseCase.SavePersonToDbUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.StarShipSearchUseCase.StarShipSearchUseCase
 import com.example.swapidevtest.DOMAIN.model.CommonItem
 import com.example.swapidevtest.DOMAIN.model.FilmResponse
+import com.example.ui.DATA.Api.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -31,11 +37,16 @@ val listofFilms = mutableListOf(
 class MainViewModel @Inject constructor(
     private val peopleSearchUseCase: PeopleSearchUseCase,
     private val starShipSearchUseCase: StarShipSearchUseCase,
-    private val getFilmsUseCase: GetFilmsUseCase
+    private val getFilmsUseCase: GetFilmsUseCase,
+    private val apiService: ApiService,
+    private val savePersonToDbUseCase: SavePersonToDbUseCase,
+    private val databaseHelperImpl: DatabaseHelperImpl
 ) : ViewModel() {
 
 
-
+    fun print() {
+        println("WOWOWOWO")
+    }
 
     init {
 //        getPeople()
@@ -58,7 +69,7 @@ class MainViewModel @Inject constructor(
                 list.addAll(peopleSearchResponse)
 
                 list.addAll(starShipsSearchResponse)
-//                println("!!! $peopleStarhipsList")
+
                 return@zip list
 
 
@@ -113,9 +124,44 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getFilmsFromUrls(listUrl: MutableList<String>): MutableList<FilmResponse> {
+        val listOfFilmresponse = mutableListOf<FilmResponse>()
+        for (film in listUrl) {
+            val id = film.filter { it.isDigit() }
+            viewModelScope.launch {
+                val filmResponse = apiService.getFilm(id)
+                listOfFilmresponse.add(filmResponse)
+            }
 
-    fun savePeopleToDb(personEntity: PersonEntity) {
-//        saveNote(personEntity)
+
+        }
+        return listOfFilmresponse
     }
+
+//fun savePersonToDb(person: CommonItem.Person){
+//    viewModelScope.launch {
+//        val entity =PersonEntity().personToPersonEntity(person)
+//        databaseHelperImpl.insertPerson(entity)
+//        println("~~~"+entity)
+//    }
+//}
+    fun savePersonToDbFlow(person: CommonItem.Person) {
+        viewModelScope.launch {
+            val entity =PersonEntity().personToPersonEntity(person)
+            savePersonToDbUseCase.savePersonToDbUseCase(entity).flatMapConcat { flow {
+                emit(entity)
+                println("PERSON ${entity.name} ADDED")
+            }
+
+            }.flowOn(Dispatchers.IO) .collect {
+            }
+
+
+
+        }
+
+    }
+
+
 
 }

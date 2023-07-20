@@ -4,18 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.swapidevtest.DOMAIN.model.FilmResponse
-import com.example.swapidevtest.databinding.ItemChildListBinding
+import com.example.swapidevtest.databinding.ItemPersonChildListBinding
 import javax.inject.Inject
 
 class ChildListAdapter @Inject constructor()  :
     ListAdapter<Any, SublistViewHolder>(
         SubListDiffUtil()
     ) {
-    lateinit var binding: ItemChildListBinding
+    lateinit var binding: ItemPersonChildListBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SublistViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = ItemChildListBinding.inflate(inflater, parent, false)
+        binding = ItemPersonChildListBinding.inflate(inflater, parent, false)
         return SublistViewHolder(binding)
 
     }
@@ -24,4 +24,3 @@ class ChildListAdapter @Inject constructor()  :
         val item = getItem(position)
         holder.bindItem(item as FilmResponse)
     }}
-

@@ -13,15 +13,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flowapi.Presentation.UI.Base.UiState
-import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.DOMAIN.model.CommonItem
 import com.example.swapidevtest.DOMAIN.model.FilmResponse
-import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.AdPersonToDbAndMakeApiRequest
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildAdapter.ChildListAdapter
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.CommonListAdapter
-import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ProvideList
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.MyPrinterInterface
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.ProvideList
+import com.example.swapidevtest.R
 import com.example.swapidevtest.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -70,49 +71,25 @@ class MainFragment() : Fragment(), CoroutineScope {
 //        observeChanges()
 
         setupZipObserver()
-        setupFilmsObserver()
-        adPeopleToDBandMakeFilmRequest()
-//        button()
+//        setupFilmsObserver()
+//        adPeopleToDBandMakeFilmRequest()
+        button()
 
         findPeopleViaEditText()
+        myPrint()
+        addPersonToDB()
     }
-//
-//    fun button() {
-//
-//        binding.buttonToLikes.setOnClickListener {
-//            findNavController().navigate(R.id.action_peopleFragment_to_likesFragment)
-//        }
-//
-//    }
 
+    fun button() {
 
-    private fun setupObserver() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchPeopleState.collect {
-                    when (it) {
-                        is UiState.Success -> {
-                            println("@@@$it")
-                        }
-
-                        is UiState.Loading -> {
-                            println(it)
-                        }
-
-                        is UiState.Error -> {
-                            //Handle Error
-                            println("@@@${it.message}")
-                            Toast.makeText(
-                                requireContext(),
-                                it.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
+        binding.buttonToLikes.setOnClickListener {
+            findNavController().navigate(R.id.action_peopleFragment_to_likesFragment)
         }
+
     }
+
+
+
 
     private fun setupZipObserver() {
         lifecycleScope.launch {
@@ -146,47 +123,6 @@ class MainFragment() : Fragment(), CoroutineScope {
         }
     }
 
-    private fun setupFilmsObserver() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchFilmsState.collect {
-                    when (it) {
-                        is UiState.Success -> {
-                            it.data?.let {
-//                                subRecycler(it.toMutableList())
-                                adapter.bindList(object :ProvideList {
-                                    override fun provideList(): MutableList<FilmResponse> {
-                                      return it
-                                    }
-                                })
-
-                            }
-
-                            for (element in it.data) {
-                                println("###" + element.title)
-                            }
-
-                            println(it)
-                        }
-
-                        is UiState.Loading -> {
-                            println(it)
-                        }
-
-                        is UiState.Error -> {
-                            //Handle Error
-                            println("@@@${it.message}")
-                            Toast.makeText(
-                                requireContext(),
-                                it.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     fun commonRecycler(list: MutableList<CommonItem>?) {
 
@@ -199,54 +135,25 @@ class MainFragment() : Fragment(), CoroutineScope {
 
     fun subRecycler(list: MutableList<Any>?) {
 
-
-//        binding.recyclerView.apply {
-//            layoutManager = LinearLayoutManager(requireContext())
-//        }
-//        binding.recyclerView.adapter = adapter
         subAdapter.submitList(list)
     }
 
-    //    private fun observeChanges() {
-//
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewModel.searchPeople.collect {
-//                    it?.let {
-//                        val listOfPerson = it.people
-////                        listOfPerson?.apply {recycler(this)
-////
-////                        }
-//                        if(listOfPerson !=null){
-//                        recycler(listOfPerson)}
-//                        println(it.people.toString())
-//
-//                    }
-//
-//                }
-//            }
-//
-//        }
-//    }
-//
-    fun adPeopleToDBandMakeFilmRequest() {
-        adapter.bindAction(object : AdPersonToDbAndMakeApiRequest {
-            override fun getFilms(listOfFilms: MutableList<String>) {
-                viewModel.getFilms(listOfFilms)
-            }
 
+    fun myPrint() {
 
-            override fun savePeopletoDb(personEntity: PersonEntity) {
-                viewModel.savePeopleToDb(personEntity)
-            }
-
-            override fun provideList(list: MutableList<Any>): MutableList<FilmResponse> {
-                TODO("Not yet implemented")
-            }
-
-
-        })
+      val obj = MyPrinterInterface { viewModel.print()
+        }
+        adapter.bindPrinter(obj)
     }
+
+
+    fun addPersonToDB(){
+
+        adapter.bindPressToSavePersonToDbFLOW(){
+            viewModel.savePersonToDbFlow(it)
+        }
+    }
+
 
     fun findPeopleViaEditText() {
         binding.edittext.afterTextChanged { }
@@ -267,7 +174,7 @@ class MainFragment() : Fragment(), CoroutineScope {
                 } else {
 
                     searchFor = searchText
-//                    viewModel.getPeople(qwerty = searchFor )
+
 
                     launch {
                         delay(3000)
@@ -284,6 +191,9 @@ class MainFragment() : Fragment(), CoroutineScope {
             }
         })
     }
+
+
+
 }
 
 

@@ -3,10 +3,7 @@ package com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildS
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.example.swapidevtest.DOMAIN.model.FilmResponse
-import com.example.swapidevtest.databinding.ItemChildListBinding
 import com.example.swapidevtest.databinding.ItemStarshipChildBinding
-import com.example.swapidevtest.databinding.StarshipViewBinding
 import javax.inject.Inject
 
 class ChildStarShipListAdapter @Inject constructor()  :

@@ -47,7 +47,7 @@ class LikesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        deleteItemFromList()
+//        deleteItemFromList()
         button()
         observeChanges()
     }
@@ -116,20 +116,20 @@ class LikesFragment : Fragment() {
     }
 
 
-    private fun deleteItemFromList() {
-
-
-        adapter.bindAction(object : MyListClickListener {
-            override fun deletePersonEntity(person: PersonEntity) {
-                viewModel.deletePersonEntity(person)
-                viewModel.getPeopleFromDB()
-
-            }
-        })
-
-
-//        binding.recyclerView.adapter = adapterR
-
-    }
+//    private fun deleteItemFromList() {
+//
+//
+//        adapter.bindAction(object : MyListClickListener {
+//            override fun deletePersonEntity(person: PersonEntity) {
+//                viewModel.deletePersonEntity(person)
+//                viewModel.getPeopleFromDB()
+//
+//            }
+//        })
+//
+//
+////        binding.recyclerView.adapter = adapterR
+//
+//    }
 }
 

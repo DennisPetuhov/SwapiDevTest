@@ -14,4 +14,5 @@ interface ApiHelper {
 
     fun getFilm(id:String): Flow<FilmResponse>
     fun getFilmList(id:MutableList<String>): Flow<MutableList<FilmResponse>>
+    fun getShipSearchByItem(qwerty: String?): Flow<List<CommonItem.StarShips>>
 }

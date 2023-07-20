@@ -34,9 +34,9 @@ class LikesViewModel @Inject constructor(private val peopleRepository: Repositor
         }
     }
 
-    fun deletePersonEntity(person:PersonEntity){
-        peopleRepository.deleteNote(person)
-    }
+//    fun deletePersonEntity(person:PersonEntity){
+//        peopleRepository.deleteNote(person)
+//    }
     fun updateList(): Flow<MutableList<PersonEntity>> {
         return peopleRepository.getAllPeopleFromDB()
     }

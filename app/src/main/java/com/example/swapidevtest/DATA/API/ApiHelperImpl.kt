@@ -44,6 +44,15 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : Ap
         }
     }
 
+    override fun getShipSearchByItem(qwerty: String?): Flow<List<CommonItem.StarShips>> {
+        return flow {
+            val result = apiService.getShipSearch(qwerty).results
+            result?.let {
+                emit(it)
+            }
+        }
+    }
+
     override fun getFilm(id: String): Flow<FilmResponse> {
         return flow { emit(apiService.getFilm(id)) }
     }
