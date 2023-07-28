@@ -1,11 +1,13 @@
 package com.example.swapidevtest.PRESENTATION.UI.Fragments
 
+import android.app.Person
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flowapi.Presentation.UI.Base.UiState
 import com.example.swapidevtest.DATA.DB.DatabaseHelperImpl
 import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.DATA.DB.personToPersonEntity
+import com.example.swapidevtest.DATA.Repository.Repository
 import com.example.swapidevtest.DOMAIN.UseCase.GetFilmsUseCase.GetFilmsUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.PeopleSearchUseCase.PeopleSearchUseCase
 import com.example.swapidevtest.DOMAIN.UseCase.SacePersonToDbUseCase.SavePersonToDbUseCase
@@ -15,9 +17,13 @@ import com.example.swapidevtest.DOMAIN.model.FilmResponse
 import com.example.ui.DATA.Api.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -40,7 +46,8 @@ class MainViewModel @Inject constructor(
     private val getFilmsUseCase: GetFilmsUseCase,
     private val apiService: ApiService,
     private val savePersonToDbUseCase: SavePersonToDbUseCase,
-    private val databaseHelperImpl: DatabaseHelperImpl
+    private val databaseHelperImpl: DatabaseHelperImpl,
+    private val repository: Repository
 ) : ViewModel() {
 
 
@@ -49,9 +56,7 @@ class MainViewModel @Inject constructor(
     }
 
     init {
-//        getPeople()
-//        getFilms(listofFilms)
-//        getZipList("star")
+
     }
 
     val searchZipListState: StateFlow<UiState<MutableList<CommonItem>>> get() = _searchZipList
@@ -138,7 +143,7 @@ class MainViewModel @Inject constructor(
         return listOfFilmresponse
     }
 
-//fun savePersonToDb(person: CommonItem.Person){
+    //fun savePersonToDb(person: CommonItem.Person){
 //    viewModelScope.launch {
 //        val entity =PersonEntity().personToPersonEntity(person)
 //        databaseHelperImpl.insertPerson(entity)
@@ -146,22 +151,75 @@ class MainViewModel @Inject constructor(
 //    }
 //}
     fun savePersonToDbFlow(person: CommonItem.Person) {
+
+
         viewModelScope.launch {
-            val entity =PersonEntity().personToPersonEntity(person)
-            savePersonToDbUseCase.savePersonToDbUseCase(entity).flatMapConcat { flow {
-                emit(entity)
-                println("PERSON ${entity.name} ADDED")
-            }
+            val entity = PersonEntity().personToPersonEntity(person)
+            savePersonToDbUseCase.savePersonToDbUseCase(entity).flatMapConcat {
+                flow {
+                    emit(entity)
+                    println("PERSON ${entity.name} ADDED")
+                }
 
-            }.flowOn(Dispatchers.IO) .collect {
+            }.flowOn(Dispatchers.IO).collect {
             }
-
 
 
         }
 
     }
 
+
+//    fun getSingleFilmByPersonId(person: CommonItem.Person): Flow<MutableList<FilmResponse>> {
+//        return flow {
+//            viewModelScope.launch {
+//                repository.getSingleFilmByPersonId(person).collect {
+//                    emit(it)
+//
+//                }
+//            }
+//        }
+//    }
+
+
+    fun addingListOfFilmsToFlow(person: CommonItem.Person) {
+        viewModelScope.launch {
+            val nestedListFlow =
+                repository.getSingleFilmByPersonId(person).collect { mutableListFilmResponse ->
+                    val uiState = _searchZipList.value
+                    if (uiState is UiState.Success) {
+                        val listOfCommonItem = uiState.data
+                        listOfCommonItem.map {
+                            when (it) {
+                                is CommonItem.Person -> {
+
+
+                                    if (it.name == person.name) {
+                                        it.listOfFilmResponse.addAll(mutableListFilmResponse)
+
+                                    } else {
+                                        it
+                                    }
+
+                                }
+
+                                is CommonItem.StarShips -> {
+
+                                }
+                            }
+                            return@map it
+                        }
+                        _searchZipList.emit(UiState.Success(listOfCommonItem))
+
+                    }
+
+
+                }
+
+        }
+
+
+    }
 
 
 }

@@ -27,13 +27,18 @@ import com.example.swapidevtest.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class MainFragment() : Fragment(), CoroutineScope {
+class MainFragment() : Fragment(), CoroutineScope, MyOnClickListener {
+
     override val coroutineContext: CoroutineContext = Dispatchers.Main
     val viewModel: MainViewModel by viewModels()
 
@@ -60,38 +65,34 @@ class MainFragment() : Fragment(), CoroutineScope {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(PeopleViewModel::class.java)
+
 //        // TODO: Use the ViewModel
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        observeChanges()
-
         setupZipObserver()
-//        setupFilmsObserver()
-//        adPeopleToDBandMakeFilmRequest()
+        bindMyClick()
         button()
-
         findPeopleViaEditText()
         myPrint()
         addPersonToDB()
     }
 
     fun button() {
-
         binding.buttonToLikes.setOnClickListener {
             findNavController().navigate(R.id.action_peopleFragment_to_likesFragment)
         }
 
     }
 
-
-
+    fun bindMyClick() {
+        adapter.bindMyClickToGetSingleItemListOfFilms(this)
+    }
 
     private fun setupZipObserver() {
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.searchZipListState.collect {
@@ -99,7 +100,6 @@ class MainFragment() : Fragment(), CoroutineScope {
                         is UiState.Success -> {
                             it.data?.let {
                                 commonRecycler(it)
-
                             }
                             println(it)
                         }
@@ -133,23 +133,18 @@ class MainFragment() : Fragment(), CoroutineScope {
         adapter.submitList(list)
     }
 
-    fun subRecycler(list: MutableList<Any>?) {
-
-        subAdapter.submitList(list)
-    }
-
 
     fun myPrint() {
 
-      val obj = MyPrinterInterface { viewModel.print()
+        val obj = MyPrinterInterface {
+            viewModel.print()
         }
         adapter.bindPrinter(obj)
     }
 
 
-    fun addPersonToDB(){
-
-        adapter.bindPressToSavePersonToDbFLOW(){
+    fun addPersonToDB() {
+        adapter.bindPressToSavePersonToDbFLOW() {
             viewModel.savePersonToDbFlow(it)
         }
     }
@@ -192,6 +187,13 @@ class MainFragment() : Fragment(), CoroutineScope {
         })
     }
 
+
+
+    override fun getSingleFilmByPersonId(person: CommonItem.Person) {
+        viewModel.addingListOfFilmsToFlow(person)
+
+
+    }
 
 
 }

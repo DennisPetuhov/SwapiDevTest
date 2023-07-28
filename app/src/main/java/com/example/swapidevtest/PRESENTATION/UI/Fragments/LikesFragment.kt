@@ -1,11 +1,10 @@
 package com.example.swapidevtest.PRESENTATION.UI.Fragments
 
-import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MyListClickListener
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.swapidevtest.DATA.DB.PersonEntity
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.FragmentLikes.PersonDBRListAdapter
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MyListClickListener
 import com.example.swapidevtest.R
 import com.example.swapidevtest.databinding.FragmentLikesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,14 +39,14 @@ class LikesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLikesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        deleteItemFromList()
+        deleteItemFromList()
         button()
         observeChanges()
     }
@@ -79,18 +79,6 @@ class LikesFragment : Fragment() {
     }
 
 
-//    private fun setupRecyclerView(list: MutableList<PersonEntity>?) {
-//        binding.recyclerView.apply {
-//            layoutManager = LinearLayoutManager(requireContext())
-////            adapter=adapterR
-//            list?.let {
-//                adapterR.updateList(it)
-//
-//
-//            }
-//        }
-//
-//    }
 
     private fun observeChanges() {
 
@@ -101,12 +89,6 @@ class LikesFragment : Fragment() {
                 viewModel.listOfPeople.collect {
                     listRecycler(it)
 
-//                    adapterR.updateList(it)
-
-//                    setupRecyclerView(it)
-
-                    println(it)
-
                 }
 
             }
@@ -115,20 +97,20 @@ class LikesFragment : Fragment() {
     }
 
 
-//    private fun deleteItemFromList() {
-//
-//
-//        adapter.bindAction(object : MyListClickListener {
-//            override fun deletePersonEntity(person: PersonEntity) {
-//                viewModel.deletePersonEntity(person)
+    private fun deleteItemFromList() {
+
+
+        adapter.bindAction(object : MyListClickListener {
+            override fun deletePersonEntity(person: PersonEntity) {
+                viewModel.deletePersonEntity(person)
 //                viewModel.getPeopleFromDB()
-//
-//            }
-//        })
-//
-//
-////        binding.recyclerView.adapter = adapterR
-//
-//    }
+
+            }
+        })
+
+
+//        binding.recyclerView.adapter = adapterR
+
+    }
 }
 

@@ -9,6 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,14 +38,16 @@ class LikesViewModel @Inject constructor(private val peopleRepository: Repositor
         }
     }
 
-//    fun deletePersonEntity(person:PersonEntity){
-//        peopleRepository.deleteNote(person)
-//    }
+    fun deletePersonEntity(person: PersonEntity) {
+        viewModelScope.launch {
+            peopleRepository.deleteNote(person).flatMapConcat {
+                flow { emit(person) }
+            }.flowOn(Dispatchers.IO).collect {}
+        }
+    }
+
+
     fun updateList(): Flow<MutableList<PersonEntity>> {
         return peopleRepository.getAllPeopleFromDB()
     }
 }
-
-//
-//    val list = dao.getAllPersons()
-//    println(list)

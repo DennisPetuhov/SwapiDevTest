@@ -7,7 +7,7 @@ interface DatabaseHelper {
     fun getAllPersons(): Flow<MutableList<PersonEntity>>
 
     fun insertPersonFlow(personEntity: PersonEntity): Flow<Unit>
-   suspend fun insertPerson(personEntity: PersonEntity)
+    fun deletePerson(personEntity: PersonEntity):Flow<Unit>
 
 
 }

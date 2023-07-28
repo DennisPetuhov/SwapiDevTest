@@ -11,9 +11,11 @@ import com.example.swapidevtest.DATA.DB.PersonDao
 
 import com.example.swapidevtest.DOMAIN.model.CommonItem
 import com.example.swapidevtest.DOMAIN.model.ItemType
+import com.example.swapidevtest.PRESENTATION.UI.Fragments.MyOnClickListener
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildAdapter.ChildListAdapter
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.ChildStarshipAdapter.ChildStarShipListAdapter
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.MyPrinterInterface
+import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.Notify
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.ProvideList
 import com.example.swapidevtest.PRESENTATION.UI.RecycleView.MainFragment.SAM.SavePersonToDBFlow
 
@@ -22,20 +24,21 @@ import com.example.swapidevtest.databinding.StarshipViewBinding
 import com.example.ui.DATA.Api.ApiService
 import javax.inject.Inject
 
-class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: ApiService) :
+class CommonListAdapter @Inject constructor() :
     ListAdapter<CommonItem, RecyclerView.ViewHolder>(
         MyModelDiffUtil()
     ) {
 
-    lateinit var subAdapterPerson: ChildListAdapter
-    lateinit var subAdapterStarShip: ChildStarShipListAdapter
+    private lateinit var subAdapterPerson: ChildListAdapter
+    private lateinit var subAdapterStarShip: ChildStarShipListAdapter
 
     private var printer: MyPrinterInterface? = null
     private var pressToSavePersonToDBFlow: SavePersonToDBFlow? = null
-//    private var pressToSavePersonToDB: SavePersonToDB? = null
-//    fun bindPressToSavePersonToDb(action: SavePersonToDB) {
-//        this.pressToSavePersonToDB = action
-//    }
+
+    private var myClickToGetSingleItemListOfFilms: MyOnClickListener? = null
+    fun bindMyClickToGetSingleItemListOfFilms(action: MyOnClickListener) {
+        this.myClickToGetSingleItemListOfFilms = action
+    }
 
     fun bindPressToSavePersonToDbFLOW(action: SavePersonToDBFlow) {
         this.pressToSavePersonToDBFlow = action
@@ -45,14 +48,9 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: 
         this.printer = printer
     }
 
-    var action: AdPersonToDbAndMakeApiRequest? = null
-    var list: ProvideList? = null
-    fun bindAction(action: AdPersonToDbAndMakeApiRequest) {
-        this.action = action
-    }
-
-    fun bindList(list: ProvideList) {
-        this.list = list
+    var notify: Notify? = null
+    fun bindNotify(notify: Notify) {
+        this.notify = notify
     }
 
 
@@ -131,7 +129,6 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: 
 
                 holder.bindPerson(item as CommonItem.Person)
 
-
                 subAdapterPerson = ChildListAdapter()
                 val layoutManager = LinearLayoutManager(
                     holder.binding.root.context,
@@ -145,12 +142,23 @@ class CommonListAdapter @Inject constructor(val dao: PersonDao, val apiService: 
                 subAdapterPerson.submitList(item.listOfFilmResponse.toList())
 
                 holder.binding.personLayout.setOnClickListener {
+//                    if (item.listOfFilmResponse.isEmpty()) {
+                        myClickToGetSingleItemListOfFilms?.getSingleFilmByPersonId(item)
+                        println("~~~~" + item.listOfFilmResponse.toString())
+//                        notifyItemChanged(position)
+//                    }
+
+                    notifyItemChanged(position)
+
+
 
                     if (holder.binding.subRecyclerView.isVisible) {
                         holder.binding.subRecyclerView.visibility = View.GONE
                     } else {
                         holder.binding.subRecyclerView.visibility = View.VISIBLE
+
                     }
+
                 }
                 holder.binding.button2.setOnClickListener {
                     pressToSavePersonToDBFlow.let {

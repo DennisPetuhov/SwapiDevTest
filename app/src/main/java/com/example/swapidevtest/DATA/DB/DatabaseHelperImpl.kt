@@ -19,8 +19,11 @@ class DatabaseHelperImpl @Inject constructor(private val personDatabase: PersonD
         emit(Unit)}
     }
 
-    override suspend fun insertPerson(personEntity: PersonEntity) {
-        personDatabase.personDao().insertPerson(personEntity)
+    override fun deletePerson(personEntity: PersonEntity): Flow<Unit> {
+       return flow { personDatabase.personDao().deletePerson(personEntity)
+       emit(Unit)}
+
     }
+
 
 }
